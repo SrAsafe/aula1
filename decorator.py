@@ -15,5 +15,3 @@ def main():
     for I in range(1,1000000):
         pass
 
-
-main()
