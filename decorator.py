@@ -12,6 +12,7 @@ def duration_time(function):
 
 @duration_time
 def main():
-    for I in range(1,1000000):
+    for i in range(1,1000000):
         pass
 
+main()
