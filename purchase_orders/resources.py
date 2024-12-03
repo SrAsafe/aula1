@@ -50,3 +50,10 @@ class PurchaseOrders(Resource):
 
         return jsonify(purchase_order)
 
+class PurchaseOrdersById(Resource):
+    def get(self,id):
+        for po in purchase_orders:
+            if po["id"] == id:
+                return jsonify(po["items"])
+
+        return jsonify({"message": "pedido{}nao encontrado".format(id)})
