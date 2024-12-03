@@ -7,4 +7,4 @@ api = Api(app)
 
 api.add_resource(PurchaseOrders,'/purchase_orders')
 
-app.run(port=5000)
+app.run(port=5000, debug=True)
