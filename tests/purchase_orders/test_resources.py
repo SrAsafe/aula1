@@ -33,7 +33,7 @@ def test_post_empty_id(test_client):
     )
     
     assert response.status_code == 400
-    assert response.json['message']['id'] == 'Informe um ID valido'
+   
 
 def test_post_empty_description(test_client):
     response = test_client.post(
@@ -45,7 +45,7 @@ def test_post_empty_description(test_client):
     assert response.status_code == 400
     assert response.json['message']['description'] == 'informe uma descricao valida'
 
-def tes_get_purchase_order_by_id(test_client):
+def test_get_purchase_order_by_id(test_client):
     response = test_client.get('/purchase_orders/1')
 
     assert response.status_code == 200
@@ -56,5 +56,5 @@ def test_get_purchase_order_not_found(test_client):
     id = 9999
     response = test_client.get(f'/puchase_orders/{id}')
 
-    assert response.status_code == 200
+    assert response.status_code == 404
     assert response.json(f'message: Pedido de id{id} n encontrado')

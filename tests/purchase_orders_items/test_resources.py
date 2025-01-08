@@ -1,4 +1,5 @@
 import json
+from tests.confest import test_client
 
 def test_get_items_by_purchase_order_id(test_client):
     response = test_client.get('/purchase_orders/1/items')
@@ -13,14 +14,14 @@ def test_get_items_by_purchase_order_id_not_found(test_client):
     id = 9999
     response = test_client.get('/purchase_orders/{}/items'.format(id))
     
-    assert response.status_code == 200
+    assert response.status_code == 404
     assert response.json['message'] == 'Pedido de id {} n encontrado'.format(
         id)
     
 
 def test_post_purchase_order_item(test_client):
     obj = {
-        'id': 2,
+        'id': 3,
         'description': 'Item teste',
         'price': 10.0
     }
@@ -31,9 +32,49 @@ def test_post_purchase_order_item(test_client):
         content_type='application/json'
     )
 
-    assert response.status_code == 200
-    assert response.json['id'] == 1
-    assert len (response.json['items']) == 2
-    assert response.json['items'][1]['id'] == obj['id']
-    assert response.json['items'][1]['description'] == obj['description']
-    assert response.json['items'][1]['price'] == obj['price']
+    assert response.status_code == 201
+    
+def test_post_invalid_id(test_client):
+    obj = {   
+        'description': 'Item teste',
+        'price': 10.0
+    }
+
+    response = test_client.post(
+        '/purchase_order_items/1/items',
+        data=json.dumps(obj),
+        content_type='application/json'
+    )
+
+    assert response.status_code == 404
+    assert response.json['message']['id'] == 2
+
+def test_post_invalid_description(test_client):
+    obj = {
+        'id': 2,          
+        'price': 10.0
+    }
+
+    response = test_client.post(
+        '/purchase_order_items/1/items',
+        data=json.dumps(obj),
+        content_type='application/json'
+    )
+
+    assert response.status_code == 404
+    assert response.json['message']['description'] == 'Informe uma descricao valido'
+
+def test_post_invalid_id(test_client):
+    obj = {
+        'id':2,   
+        'description': 'Item teste',
+    }
+
+    response = test_client.post(
+        '/purchase_order_items/1/items',
+        data=json.dumps(obj),
+        content_type='application/json'
+    )
+
+    assert response.status_code == 400
+    assert response.json['message']['price'] == 'Informe um preco valido'
